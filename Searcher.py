@@ -6,7 +6,10 @@ import webbrowser
 # Input for city/state/province to search
 location = input("Enter City/State/Province (MUST be present on www.gamedevmap.com) or nothing will happen: ")
 # Making the location string friendly with spaces
-location = "%20".join(location.split())
+
+#It's important to make this a new variable because there's an inconsistency with some of the urls where sometimes spaces
+#   are just spaces and sometimes they use '%20' as a divider. Not sure why, but I ran into this for San Francisco
+locationWithPercents = "%20".join(location.split()).lower()
 
 #Getting how many tabs to open at once, I wanna let the user have control over this in case their rig is really beefy or really weak
 while True:
@@ -29,7 +32,9 @@ pages = []
 print("Please wait, could be opening/parsing 100+ pages so it could take a minute...")
 
 while nextURL == "":
-    status, response = http.request("https://www.gamedevmap.com/index.php?location=" + location + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100")
+
+    requestString = "https://www.gamedevmap.com/index.php?location=" + locationWithPercents + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100"
+    status, response = http.request(requestString)
     # Allows us to go to the next job page
     jobPage += 100
     nextURL = ""
@@ -37,21 +42,18 @@ while nextURL == "":
         if link.has_attr('href'):
             if link['href'][:5] =="http:":
                 studioPages.append(link)
-            elif link['href'] == "index.php?location=" + location + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100":
+            elif link['href'] == "index.php?location=" + locationWithPercents + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100"\
+                    or link['href'] == "index.php?location=" + location + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100":
                 nextURL = link['href']
-            pages.append(link)
-
-        if "zynga" in link:
-            print()
     if nextURL == "":
         break
     else:
-        status, response = http.request("https://www.gamedevmap.com/index.php?location=" + location + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100")
+        status, response = http.request("https://www.gamedevmap.com/index.php?location=" + locationWithPercents + "&country=&state=&city=&query=&type=&start=" + str(jobPage) + "&count=100")
         # Resets nextURL so we loop through the next job page
         nextURL = ""
 
 
-
+print(str(len(studioPages)) + " studio pages found...")
 # This block opens all the game job pages
 for studioPage in studioPages:
     url = studioPage['href']
