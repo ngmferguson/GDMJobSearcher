@@ -9,3 +9,4 @@ I wrote a script which takes a location name as input and will read, sort, and o
 Just download the .zip, unzip it, and click the .exe to run it. It'll ask for a place name as input (it MUST be an option on gamedevmap.com, otherwise you get 0 results.) as well as a number for how many tabs you want opened at a time.
 
 Like I said, I can't promise 100% success getting all website with job pages, there's been a few that I've noticed missing, but this will save A LOT of time.
+For example: In Austin my script found 53 webpages with possible job pages, and after a manual check I only counted 51. So my script missed some I got, but it looks like my human eyes also missed some that my script god.
