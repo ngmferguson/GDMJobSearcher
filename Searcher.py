@@ -5,6 +5,8 @@ import webbrowser
 
 # Input for city/state/province to search
 location = input("Enter City/State/Province (MUST be present on www.gamedevmap.com) or nothing will happen: ")
+# Making the location string friendly with spaces
+location = "%20".join(location.split())
 
 #Getting how many tabs to open at once, I wanna let the user have control over this in case their rig is really beefy or really weak
 while True:
